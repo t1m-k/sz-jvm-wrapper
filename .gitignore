@@ -5,6 +5,8 @@
 *.syso
 
 build/
+cache/
+configs/
 
 __debug_bin*
 
