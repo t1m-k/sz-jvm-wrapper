@@ -153,11 +153,15 @@ func (m menuModel) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "up", "k":
 		if m.selected > 0 {
 			m.selected--
+		} else {
+			m.selected = len(m.items()) - 1
 		}
 		return m, nil
 	case "down", "j":
 		if max := len(m.items()) - 1; m.selected < max {
 			m.selected++
+		} else {
+			m.selected = 0
 		}
 		return m, nil
 	case "enter", " ":
