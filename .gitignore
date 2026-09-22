@@ -3,10 +3,15 @@
 *.obj
 *.o
 *.syso
+*.bundle
 
 build/
-cache/
 configs/
+cache/
+logs/
+
+internal/profile/releases_generated.go
+internal/buildinfo/buildinfo_generated.go
 
 __debug_bin*
 

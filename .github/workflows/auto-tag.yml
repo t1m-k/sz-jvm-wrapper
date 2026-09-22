@@ -39,34 +39,28 @@ jobs:
 
           echo "version=v$MAJOR.$MINOR.$PATCH" >> "$GITHUB_OUTPUT"
 
-      - name: Build changelog
+      - name: Extract release description
+        id: description
         run: |
-          PREV="${{ steps.latest.outputs.tag }}"
-          NEW="${{ steps.bump.outputs.version }}"
-
-          # First-release fallback: if PREV is the synthetic v0.0.0 sentinel
-          # (no real tag exists yet) log everything from the repository root
-          # and link to the commit list instead of a compare view.
-          if git rev-parse -q --verify "refs/tags/$PREV" >/dev/null; then
-            RANGE="$PREV..HEAD"
-            COMPARE="https://github.com/${{ github.repository }}/compare/$PREV...$NEW"
-          else
-            RANGE="HEAD"
-            COMPARE="https://github.com/${{ github.repository }}/commits/$NEW"
+          # Get the last commit SHA from the PR
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          
+          # Get commit message
+          MSG=$(git show "$HEAD_SHA" --format=%B --no-patch)
+          
+          # Extract description from line starting with "release: "
+          DESCRIPTION=$(echo "$MSG" | grep '^release: ' | sed 's/^release: //' | head -n1)
+          
+          # Fallback to default if not found
+          if [ -z "$DESCRIPTION" ]; then
+            DESCRIPTION="new release placeholder - this text needs to be updated"
           fi
-
-          {
-            echo "## What's Changed in $NEW"
-            echo ""
-            git log $RANGE --pretty=format:"- %s" --no-merges
-            echo ""
-            echo ""
-            echo "**Full Changelog**: $COMPARE"
-          } > /tmp/changelog.md
+          
+          echo "description=$DESCRIPTION" >> "$GITHUB_OUTPUT"
 
       - name: Create tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "${{ steps.bump.outputs.version }}" -F /tmp/changelog.md
+          git tag -a "${{ steps.bump.outputs.version }}" -m "${{ steps.description.outputs.description }}"
           git push origin "${{ steps.bump.outputs.version }}"

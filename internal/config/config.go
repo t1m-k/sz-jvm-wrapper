@@ -302,8 +302,8 @@ func cleanName(name string) (string, error) {
 	if name == "" {
 		return "", fmt.Errorf("%w: empty", ErrInvalidName)
 	}
-	if strings.HasSuffix(name, ".json") {
-		name = strings.TrimSuffix(name, ".json")
+	if before, ok := strings.CutSuffix(name, ".json"); ok {
+		name = before
 	}
 	if strings.ContainsAny(name, `:*?"<>|`) {
 		return "", fmt.Errorf("%w: %s", ErrInvalidName, name)

@@ -23,6 +23,9 @@ jobs:
       - name: Install go-winres
         run: go install github.com/tc-hib/go-winres@v0.3.3
 
+      - name: Generate release and buildinfo versions from git tags
+        run: go generate ./internal
+
       - name: Patch version from tag
         shell: pwsh
         run: |
@@ -57,11 +60,8 @@ jobs:
           GOARCH: amd64
         run: |
           mkdir -p build
-          version="${GITHUB_REF_NAME}"
-          commit="${GITHUB_SHA::7}"
-          ldflags="-s -w -X github.com/EXBO-Community/stalcraft-jvm-optimization/internal/buildinfo.Version=${version} -X github.com/EXBO-Community/stalcraft-jvm-optimization/internal/buildinfo.Commit=${commit}"
-          go build -trimpath -ldflags="${ldflags}" -o build/cli.exe     ./cmd/cli
-          go build -trimpath -ldflags="${ldflags}" -o build/service.exe ./cmd/service
+          go build -trimpath -ldflags="-s -w" -o build/cli.exe     ./cmd/cli
+          go build -trimpath -ldflags="-s -w" -o build/service.exe ./cmd/service
 
       - name: Package release zip
         shell: pwsh

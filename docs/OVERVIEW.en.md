@@ -72,11 +72,9 @@ From the repository root:
 
 ```bash
 mkdir -p build
-version="$(git describe --tags --always --dirty)"
-commit="$(git rev-parse --short HEAD)"
-ldflags="-s -w -X github.com/EXBO-Community/stalcraft-jvm-optimization/internal/buildinfo.Version=${version} -X github.com/EXBO-Community/stalcraft-jvm-optimization/internal/buildinfo.Commit=${commit}"
-go build -trimpath -ldflags="${ldflags}" -o build/cli.exe     ./cmd/cli
-go build -trimpath -ldflags="${ldflags}" -o build/service.exe ./cmd/service
+go generate ./internal
+go build -trimpath -ldflags="-s -w" -o build/cli.exe     ./cmd/cli
+go build -trimpath -ldflags="-s -w" -o build/service.exe ./cmd/service
 ```
 
 Drop both binaries into the same directory before running — the installer is only in `cli.exe`, but it looks for `service.exe` next to itself.

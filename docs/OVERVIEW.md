@@ -72,11 +72,9 @@ cli.exe config select v1.1.2/default
 
 ```bash
 mkdir -p build
-version="$(git describe --tags --always --dirty)"
-commit="$(git rev-parse --short HEAD)"
-ldflags="-s -w -X github.com/EXBO-Community/stalcraft-jvm-optimization/internal/buildinfo.Version=${version} -X github.com/EXBO-Community/stalcraft-jvm-optimization/internal/buildinfo.Commit=${commit}"
-go build -trimpath -ldflags="${ldflags}" -o build/cli.exe     ./cmd/cli
-go build -trimpath -ldflags="${ldflags}" -o build/service.exe ./cmd/service
+go generate ./internal
+go build -trimpath -ldflags="-s -w" -o build/cli.exe     ./cmd/cli
+go build -trimpath -ldflags="-s -w" -o build/service.exe ./cmd/service
 ```
 
 Оба бинарника затем кладутся в одну директорию — установку делает только `cli.exe`, но он ищет `service.exe` рядом с собой.

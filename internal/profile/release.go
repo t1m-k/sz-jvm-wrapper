@@ -30,54 +30,8 @@ type Generated struct {
 	Config config.Config
 }
 
-var releases = []Release{
-	release("v1.0.4", "Legacy runtime flags. 6GB minimum heap, high free-RAM based cap; rough on 16GB systems.", generateV104Default),
-	release("v1.0.5", "Same tuning as v1.0.4, kept as a compatibility snapshot.", generateV105Default),
-	release("v1.0.6", "Safer legacy heap sizing: requires 6GB free RAM and caps heap at 8GB.", generateV106Default),
-	release("v1.0.7", "First generated JSON profile. Strong-CPU branch, 6GB minimum heap.", generateV107Default),
-	release("v1.0.8", "Lower 4GB minimum heap and safer standard JIT settings.", generateV108Default),
-	release("v1.1.0", "Modern cache-aware generator. More aggressive profile, up to 8GB heap.", generateV110Default),
-	release("v1.1.1", "Memory-tier profile with calmer G1 pauses and a 6GB heap cap.", generateV111Default),
-	release("v1.1.2", "Current stable v1.1 profile. Same generator as v1.1.1.", generateV112Default),
-}
-
-func release(version, description string, generate func(sysinfo.Info) config.Config) Release {
-	return Release{
-		Version:       version,
-		Label:         version,
-		Description:   description,
-		DefaultPreset: "default",
-		Presets: []Preset{
-			{
-				Name:     "default",
-				Label:    "default",
-				Generate: generate,
-			},
-		},
-	}
-}
-
-func Releases() []Release {
-	out := make([]Release, len(releases))
-	copy(out, releases)
-	return out
-}
-
-func Latest() Release {
-	return releases[len(releases)-1]
-}
-
 func LatestDefaultID() string {
 	return Latest().DefaultID()
-}
-
-func Find(version string) (Release, bool) {
-	for _, r := range releases {
-		if r.Version == version {
-			return r, true
-		}
-	}
-	return Release{}, false
 }
 
 func (r Release) DefaultID() string {
