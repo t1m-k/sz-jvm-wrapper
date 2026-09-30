@@ -27,5 +27,6 @@ __debug_bin*
 
 mempalace.yaml
 entities.json
+overrides.json
 
 .DS_Store

@@ -150,14 +150,14 @@ func (m menuModel) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "esc", "backspace", "left":
 		m.goBack()
 		return m, nil
-	case "up", "k":
+	case "up", "k", "л":
 		if m.selected > 0 {
 			m.selected--
 		} else {
 			m.selected = len(m.items()) - 1
 		}
 		return m, nil
-	case "down", "j":
+	case "down", "j", "о":
 		if max := len(m.items()) - 1; m.selected < max {
 			m.selected++
 		} else {
