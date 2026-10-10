@@ -101,3 +101,5 @@ go build -trimpath -ldflags="${ldflags}" -o build/service.exe ./cmd/service
 Drop both binaries into the same directory before running — the installer is only in `cli.exe`, but it looks for `service.exe` next to itself.
 
 Run `bash scripts/check.sh` locally and in Windows CI for gofmt, go vet, builds, and race-enabled tests. On macOS/Linux it runs portable tests and a Windows cross-build; full UI and registry behavior require Windows.
+
+Git preserves LF endings for `.go` and `.sh` through `.gitattributes`, including Windows checkouts with `core.autocrlf=true`. This keeps `gofmt` checks and Bash scripts consistent across platforms.

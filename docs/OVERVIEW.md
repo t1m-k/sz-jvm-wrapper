@@ -101,3 +101,5 @@ go build -trimpath -ldflags="${ldflags}" -o build/service.exe ./cmd/service
 Оба бинарника затем кладутся в одну директорию — установку делает только `cli.exe`, но он ищет `service.exe` рядом с собой.
 
 Проверки локально и в Windows CI запускаются одной командой: `bash scripts/check.sh` (gofmt, go vet, сборка и тесты с race detector). На macOS/Linux выполняются переносимые тесты и Windows cross-build; полный UI и реестр проверяются только на Windows.
+
+Git сохраняет LF для `.go` и `.sh` через `.gitattributes`, в том числе при Windows-checkout с `core.autocrlf=true`. Это необходимо для одинакового результата `gofmt` и запуска Bash-скриптов.
