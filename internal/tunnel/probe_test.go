@@ -34,9 +34,6 @@ func TestProbeDecodesResponseAndLimit(t *testing.T) {
 	if result.ServerRTT != 37*time.Millisecond {
 		t.Fatalf("server RTT = %s, want 37ms", result.ServerRTT)
 	}
-	if result.ClientRTT <= 0 {
-		t.Fatalf("client RTT = %s, want positive duration", result.ClientRTT)
-	}
 	if !result.LimitReached {
 		t.Fatal("limit flag was not decoded")
 	}

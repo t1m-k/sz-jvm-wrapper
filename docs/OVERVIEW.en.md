@@ -46,6 +46,8 @@ The series maximum is also shown: a single huge reply stays visible even when it
 
 **RTT provenance:** server RTT is the signed millisecond value reported by the tunnel, not a second measurement performed by this PC. A large non-negative server value is preserved without arbitrary clipping; the robust score does not rewrite raw RTTs. Historical arithmetic averages can remain high after a large reply, but previous rounds do not influence a fresh search score. Accepted replies are logged as `tunnel probe reply` with region, group, node name, round, RTT values, and limit state; UUIDs and raw packets are not logged. These diagnostics identify the source of a displayed value, but cannot verify whether the tunnel's backend RTT report is accurate.
 
+A very short local RTT can read as zero at the system clock's resolution. This does not mean zero physical latency; the measured value is not replaced with an artificial minimum.
+
 ## Logging
 
 Both binaries write structured logs into `logs/wrapper.log` next to the executable: startup, hardware detection, config load, game process spawn, exit code. User profile paths are redacted, raw launcher arguments and JVM flags are never logged. The file is truncated once it exceeds 2 MB.
