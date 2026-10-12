@@ -1,6 +1,8 @@
 // Package profile contains frozen config generators for released tuning
 // profiles. It deliberately depends on config storage, while config does not
 // know anything about profile versions.
+//
+//go:generate go run ../../scripts/generate.go
 package profile
 
 import (
@@ -30,8 +32,29 @@ type Generated struct {
 	Config config.Config
 }
 
+var releases []Release
+
+func Releases() []Release {
+	out := make([]Release, len(releases))
+	copy(out, releases)
+	return out
+}
+
+func Latest() Release {
+	return releases[0]
+}
+
 func LatestDefaultID() string {
 	return Latest().DefaultID()
+}
+
+func Find(version string) (Release, bool) {
+	for _, r := range releases {
+		if r.Version == version {
+			return r, true
+		}
+	}
+	return Release{}, false
 }
 
 func (r Release) DefaultID() string {
