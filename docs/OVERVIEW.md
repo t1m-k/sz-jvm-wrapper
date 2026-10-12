@@ -89,11 +89,26 @@ cli.exe config disable
 ## Сборка проекта
 
 `cli.exe` и `service.exe` можно не только скачать из релизов, но и собрать самому.
+
+Для корректной сборки конфигов понадобятся гит-тэги. После этого собранные бинарные файлы не обращаются к Git.
+
+С некоторой вероятностью тэги могут отсутствовать. Проверить: `git tag`. Чтобы скачать их на свой компьютер, выполните нижеследующие команды.
+
+Если Вы клонировали [основной репозиторий](https://github.com/EXBO-Community/stalcraft-jvm-optimization):
+```bash
+git fetch origin --tags
+```
+Если вы работаете в своём форке, сначала добавьте его как удалённый источник:
+```bash
+git remote add upstream https://github.com/EXBO-Community/stalcraft-jvm-optimization
+git fetch upstream --tags
+```
+Теперь можно приступать к самой сборке.
 Из корня репозитория:
 
 ```bash
 mkdir -p build
-go generate ./internal
+go generate ./...
 go build -trimpath -ldflags="-s -w" -o build/cli.exe     ./cmd/cli
 go build -trimpath -ldflags="-s -w" -o build/service.exe ./cmd/service
 ```

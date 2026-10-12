@@ -89,11 +89,26 @@ Running `cli.exe` without arguments opens the interactive menu that exposes the 
 ## Building the Project
 
 `cli.exe` and `service.exe` can be downloaded from the releases page or built locally.
+
+Git tags are required to build the configurations correctly. Once built, the compiled binaries do not access Git.
+
+There is a chance that the tags may be missing. To check, run: `git tag`. To download them to your computer, follow the commands below.
+
+If you cloned [the main repository](https://github.com/EXBO-Community/stalcraft-jvm-optimization):
+```bash
+git fetch origin --tags
+```
+If you are working in your fork, first add it as a remote source:
+```bash
+git remote add upstream https://github.com/EXBO-Community/stalcraft-jvm-optimization
+git fetch upstream --tags
+```
+Now you can proceed to the build itself.
 From the repository root:
 
 ```bash
 mkdir -p build
-go generate ./internal
+go generate ./...
 go build -trimpath -ldflags="-s -w" -o build/cli.exe     ./cmd/cli
 go build -trimpath -ldflags="-s -w" -o build/service.exe ./cmd/service
 ```
